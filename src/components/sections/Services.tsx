@@ -8,59 +8,47 @@ const SERVICES = [
     id: "automation",
     number: "01",
     title: "Tự Động Hóa Quy Trình AI",
-    desc: "Triển khai các quy trình tự trị xử lý các tác vụ dữ liệu khối lượng lớn mà không cần sự can thiệp của con người. Tối ưu hóa workflow & tích hợp hệ thống.",
+    desc: "Triển khai các quy trình tự trị xử lý các tác vụ dữ liệu khối lượng lớn mà không cần sự can thiệp của con người.",
     features: [
       "Tự động hóa workflow n8n / Make.com",
       "Tích hợp API & hệ thống CRM",
       "Xây dựng chatbot thông minh",
       "Phân tích dữ liệu tự động",
     ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-[26px] text-primary-light">
-        <path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
-      </svg>
-    ),
+    icon: "⚙️",
     featured: false,
   },
   {
     id: "strategy",
     number: "02",
     title: "Chiến Lược Kinh Doanh & Tích Hợp AI",
-    desc: "Tư vấn cấp cao để điều chỉnh các mục tiêu kinh doanh cốt lõi với các ngăn xếp LLM và tự động hóa mới nhất. Thiết kế lộ trình AI toàn diện.",
+    desc: "Tư vấn cấp cao để điều chỉnh các mục tiêu kinh doanh cốt lõi với các ngăn xếp LLM và tự động hóa mới nhất.",
     features: [
       "Đánh giá mức độ sẵn sàng AI",
       "Thiết kế kiến trúc hệ thống AI",
       "Lộ trình triển khai chi tiết",
       "Đo lường ROI và hiệu suất",
     ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-[26px] text-primary-light">
-        <path d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-      </svg>
-    ),
+    icon: "📊",
     featured: true,
   },
   {
     id: "coaching",
     number: "03",
     title: "Huấn Luyện Hiệu Suất Cá Nhân",
-    desc: "Đào tạo cấp điều hành về việc tận dụng các trợ lý AI cá nhân để thu hồi hơn 20 giờ làm việc mỗi tuần và tối đa hóa năng lực.",
+    desc: "Đào tạo cấp điều hành về việc tận dụng các trợ lý AI cá nhân để thu hồi hơn 20 giờ làm việc mỗi tuần.",
     features: [
       "Thiết lập hệ thống AI cá nhân",
       "Prompt engineering nâng cao",
       "Tối ưu luồng công việc cá nhân",
       "Coaching 1-on-1 hàng tuần",
     ],
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-[26px] text-primary-light">
-        <path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-      </svg>
-    ),
+    icon: "🎓",
     featured: false,
   },
 ] as const;
 
-/* ——— Service Card ——— */
+/* ——— Service Card as a Win2K window ——— */
 function ServiceCard({
   service,
   index,
@@ -75,65 +63,64 @@ function ServiceCard({
     <article
       ref={ref}
       id={`service-${service.id}`}
-      className={`
-        card-glow-hover reveal-element ${isInView ? "visible" : ""} ${delayClass}
-        relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-8
-        backdrop-blur-xl
-        ${
-          service.featured
-            ? "border-primary/30 bg-linear-to-br from-primary/15 to-accent/8"
-            : "border-border bg-bg-card"
-        }
-      `}
+      className={`win2k-window reveal-element ${isInView ? "visible" : ""} ${delayClass} flex flex-col`}
     >
-      {/* Hover overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/8 to-accent/5 opacity-0 transition-opacity duration-250 group-hover:opacity-100" />
-
-      {/* Featured badge */}
-      {service.featured && (
-        <div className="absolute top-5 right-5 rounded-full bg-linear-to-br from-primary to-accent px-3 py-1 text-[0.7rem] font-semibold text-white">
-          Phổ biến nhất
-        </div>
-      )}
-
-      {/* Number */}
-      <span className="relative z-10 font-display text-[0.7rem] font-bold tracking-widest text-text-faint">
-        {service.number}
-      </span>
-
-      {/* Icon */}
-      <div className="relative z-10 flex size-[52px] items-center justify-center rounded-lg border border-border bg-primary-glow transition-all duration-250">
-        {service.icon}
+      {/* Title bar */}
+      <div className={service.featured ? "win2k-titlebar" : "win2k-titlebar-inactive"}>
+        <span className="text-lg leading-none" aria-hidden="true">{service.icon}</span>
+        <span className="flex-1 text-[11px] font-bold truncate">
+          {service.number}. {service.title}
+        </span>
+        {service.featured && (
+          <span className="bg-yellow-300 text-black text-[9px] font-bold px-1.5 py-0.5 mr-1 border border-yellow-600">
+            PHO BIEN
+          </span>
+        )}
+        <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
       </div>
 
-      {/* Title */}
-      <h3 className="relative z-10 font-display text-[1.15rem] font-bold leading-snug">
-        {service.title}
-      </h3>
-
-      {/* Description */}
-      <p className="relative z-10 flex-1 text-[0.875rem] leading-[1.7] text-text-muted">
-        {service.desc}
-      </p>
-
-      {/* Features */}
-      <ul className="relative z-10 flex flex-col gap-2" aria-label={`Tính năng ${service.title}`}>
-        {service.features.map((f) => (
-          <li key={f} className="relative pl-5 text-[0.8rem] text-text-muted">
-            <span className="absolute left-0 text-[0.75rem] text-primary-light" aria-hidden="true">→</span>
-            {f}
-          </li>
-        ))}
-      </ul>
-
-      {/* CTA */}
-      <div className="relative z-10 mt-auto">
-        <a
-          href="#contact"
-          className="service-arrow inline-flex items-center gap-1.5 text-[0.85rem] font-semibold text-primary-light transition-all"
-        >
-          Tìm hiểu thêm <span aria-hidden="true">→</span>
+      {/* Toolbar */}
+      <div className="win2k-toolbar">
+        <button className="win2k-toolbar-btn" title="Properties" aria-label="Properties">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>
+          </svg>
+        </button>
+        <button className="win2k-toolbar-btn" title="Help" aria-label="Help">?</button>
+        <div className="win2k-separator" aria-hidden="true" />
+        <a href="#contact" className="win2k-toolbar-btn text-[10px] font-bold" title="Contact" aria-label="Contact">
+          &#128233;
         </a>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 p-4 bg-[#d4d0c8]">
+        <p className="text-[11px] leading-relaxed text-black mb-4">{service.desc}</p>
+
+        {/* Features as a list with classic bullets */}
+        <div className="win2k-groupbox mb-4">
+          <span className="win2k-groupbox-label">Tính Năng</span>
+          <ul className="pt-1 flex flex-col gap-0.5" aria-label={`Tính năng ${service.title}`}>
+            {service.features.map((f) => (
+              <li key={f} className="flex items-start gap-1.5 text-[11px] text-black">
+                <span className="text-[#000080] font-bold mt-px" aria-hidden="true">-</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* CTA */}
+        <a href="#contact" className="win2k-btn win2k-btn-primary text-[11px] block text-center w-full">
+          Tìm Hiểu Thêm
+        </a>
+      </div>
+
+      {/* Status bar */}
+      <div className="win2k-statusbar">
+        <div className="win2k-sunken px-2 flex-1 text-[10px]">Sẵn sàng</div>
+        <div className="win2k-sunken px-2 text-[10px]">{service.features.length} tính năng</div>
       </div>
     </article>
   );
@@ -143,37 +130,82 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="relative bg-bg-2 px-[clamp(1.5rem,5vw,2rem)] py-[clamp(5rem,10vw,8rem)]"
+      className="bg-[#008080] px-4 py-8"
       aria-label="Dịch vụ"
     >
-      {/* Ambient bg */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_20%,rgba(6,182,212,0.06)_0%,transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_40%_30%_at_20%_80%,rgba(124,58,237,0.08)_0%,transparent_70%)]" />
-      </div>
-
-      <div className="relative mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-[1100px]">
         {/* Section label */}
-        <div className="mb-10 flex items-center gap-4 text-[0.75rem] font-semibold uppercase tracking-[0.15em] text-text-muted">
-          <span className="h-px flex-1 bg-border" aria-hidden="true" />
-          <span>02 / Dịch Vụ</span>
-          <span className="h-px flex-1 bg-border" aria-hidden="true" />
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-px flex-1 bg-[#006060]" aria-hidden="true" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#c0e8e8]">
+            02 / Dịch Vụ
+          </span>
+          <div className="h-px flex-1 bg-[#006060]" aria-hidden="true" />
         </div>
 
-        {/* Header */}
-        <div className="mb-14 max-w-[640px]">
-          <h2 className="mb-4 font-display text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.15] tracking-tight">
-            Giao Thức Cốt Lõi
-            <br />
-            <span className="gradient-text">Dịch Vụ Chuyên Sâu</span>
-          </h2>
-          <p className="text-[1.05rem] leading-[1.7] text-text-muted">
-            Các chiến lược AI được thiết kế riêng cho khả năng mở rộng của doanh nghiệp và hiệu suất đỉnh cao của cá nhân.
-          </p>
+        {/* Explorer-style container */}
+        <div className="win2k-window mb-4">
+          <div className="win2k-titlebar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
+              <path d="M3 7a1 1 0 011-1h4l2 2h9a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V7z"/>
+            </svg>
+            <span className="flex-1 text-[11px] font-bold text-white">
+              Dịch Vụ Chuyên Sâu - Windows Explorer
+            </span>
+            <div className="flex gap-0.5">
+              <button className="win2k-titlebar-btn" aria-label="Minimize">_</button>
+              <button className="win2k-titlebar-btn" aria-label="Maximize">
+                <span className="block w-2 h-2 border border-black" />
+              </button>
+              <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
+            </div>
+          </div>
+
+          {/* Menu bar */}
+          <div className="win2k-menubar">
+            {["File", "Edit", "View", "Favorites", "Tools", "Help"].map((item) => (
+              <span key={item} className="win2k-menuitem text-[11px]">{item}</span>
+            ))}
+          </div>
+
+          {/* Toolbar */}
+          <div className="win2k-toolbar">
+            <button className="win2k-toolbar-btn" aria-label="Back">&#8592;</button>
+            <button className="win2k-toolbar-btn" aria-label="Forward">&#8594;</button>
+            <button className="win2k-toolbar-btn" aria-label="Up">&#8593;</button>
+            <div className="win2k-separator" aria-hidden="true" />
+            <button className="win2k-toolbar-btn" aria-label="Search">&#128269;</button>
+            <button className="win2k-toolbar-btn" aria-label="Folders">&#128193;</button>
+            <div className="win2k-separator" aria-hidden="true" />
+            <button className="win2k-toolbar-btn" aria-label="Views">&#9776;</button>
+          </div>
+
+          {/* Address bar */}
+          <div className="flex items-center gap-1 px-2 py-1 border-b border-[#808080] bg-[#d4d0c8]">
+            <span className="text-[10px] text-black font-bold">Địa chỉ:</span>
+            <div className="win2k-sunken px-2 py-0.5 text-[10px] flex-1 text-black">
+              C:\ARCHITECT.AI\Services\
+            </div>
+          </div>
+
+          {/* Header row */}
+          <div className="bg-[#d4d0c8] px-4 py-3">
+            <h2 className="text-[22px] font-bold text-[#000080] mb-1">
+              Giao Thức Cốt Lõi
+            </h2>
+            <p className="text-[11px] text-black">
+              3 dịch vụ tìm thấy. Chọn một dịch vụ để xem chi tiết.
+            </p>
+          </div>
+
+          <div className="win2k-statusbar px-4 py-1">
+            <span className="text-[10px]">3 đối tượng</span>
+            <span className="ml-4 text-[10px]">Ổ C:</span>
+          </div>
         </div>
 
-        {/* Grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Service cards grid */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((s, i) => (
             <ServiceCard key={s.id} service={s} index={i} />
           ))}

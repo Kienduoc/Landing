@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { useState, useEffect } from "react";
 
 const FOOTER_LINKS = [
   { label: "Trang Chủ", href: "#home" },
@@ -8,78 +10,200 @@ const FOOTER_LINKS = [
   { label: "Liên Hệ", href: "#contact" },
 ] as const;
 
+const TASKBAR_BUTTONS = [
+  { label: "Trang Chủ", icon: "🌐", href: "#home" },
+  { label: "Dịch Vụ", icon: "⚙️", href: "#services" },
+  { label: "Dự Án", icon: "📁", href: "#portfolio" },
+] as const;
+
 export default function Footer() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString("vi-VN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <footer className="border-t border-border bg-bg px-[clamp(1.5rem,5vw,2rem)] py-12 pb-6" role="contentinfo">
-      <div className="mx-auto max-w-[1200px]">
-        {/* ——— Top row ——— */}
-        <div className="mb-10 grid grid-cols-1 items-start gap-8 border-b border-border pb-10 md:grid-cols-[1fr_auto_auto] md:gap-12">
-          {/* Brand */}
-          <div>
-            <a
-              href="#home"
-              className="flex items-center gap-2.5 font-display text-[1.1rem] font-bold tracking-tight"
-              aria-label="ARCHITECT.AI - Trang chủ"
-            >
-              <span className="text-[1.4rem] text-primary-light">⬡</span>
-              <span>
-                ARCHITECT<span className="text-primary-light">.AI</span>
+    <footer role="contentinfo">
+      {/* ——— Main footer window ——— */}
+      <div className="bg-[#008080] px-4 py-6">
+        <div className="mx-auto max-w-[1100px]">
+          <div className="win2k-window">
+            <div className="win2k-titlebar">
+              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" className="shrink-0">
+                <rect x="0" y="0" width="7" height="7" fill="#FF0000" />
+                <rect x="9" y="0" width="7" height="7" fill="#00FF00" />
+                <rect x="0" y="9" width="7" height="7" fill="#0000FF" />
+                <rect x="9" y="9" width="7" height="7" fill="#FFFF00" />
+              </svg>
+              <span className="flex-1 text-[11px] font-bold text-white">
+                ARCHITECT.AI — Chân Trang
               </span>
-            </a>
-            <p className="mt-2 text-[0.825rem] text-text-muted">
-              Kiến tạo tương lai doanh nghiệp với AI
-            </p>
-          </div>
+              <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
+            </div>
 
-          {/* Nav Links */}
-          <nav
-            className="flex flex-wrap gap-3 gap-x-6 md:flex-col md:gap-2.5"
-            aria-label="Footer navigation"
-          >
-            {FOOTER_LINKS.map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                className="text-[0.85rem] text-text-muted transition-colors hover:text-text"
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
+            <div className="p-5 bg-[#d4d0c8]">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                {/* Brand */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="win2k-raised p-1">
+                      <svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true">
+                        <rect x="0" y="0" width="7" height="7" fill="#FF0000" />
+                        <rect x="9" y="0" width="7" height="7" fill="#00FF00" />
+                        <rect x="0" y="9" width="7" height="7" fill="#0000FF" />
+                        <rect x="9" y="9" width="7" height="7" fill="#FFFF00" />
+                      </svg>
+                    </div>
+                    <a
+                      href="#home"
+                      className="text-[14px] font-bold text-[#000080]"
+                      aria-label="ARCHITECT.AI - Trang chủ"
+                    >
+                      ARCHITECT<span className="text-[#008080]">.AI</span>
+                    </a>
+                  </div>
+                  <p className="text-[10px] text-[#444] mb-3 leading-relaxed">
+                    Kiến tạo tương lai doanh nghiệp với AI.<br />
+                    © 2026 ARCHITECT.AI. All rights reserved.
+                  </p>
+                  <div className="flex gap-1">
+                    <a
+                      href="https://linkedin.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="win2k-btn text-[10px] px-2 py-0.5 min-w-0"
+                      aria-label="LinkedIn"
+                    >
+                      in
+                    </a>
+                    <a
+                      href="https://twitter.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="win2k-btn text-[10px] px-2 py-0.5 min-w-0"
+                      aria-label="Twitter / X"
+                    >
+                      X
+                    </a>
+                  </div>
+                </div>
 
-          {/* Social */}
-          <div className="flex gap-3">
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex size-[38px] items-center justify-center rounded-full border border-border bg-bg-card text-text-muted transition-all hover:border-border-hover hover:bg-primary-glow hover:text-primary-light"
-              aria-label="LinkedIn"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex size-[38px] items-center justify-center rounded-full border border-border bg-bg-card text-text-muted transition-all hover:border-border-hover hover:bg-primary-glow hover:text-primary-light"
-              aria-label="Twitter / X"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
+                {/* Navigation */}
+                <nav aria-label="Footer navigation">
+                  <div className="win2k-groupbox">
+                    <span className="win2k-groupbox-label">Điều Hướng</span>
+                    <ul className="pt-1 flex flex-col gap-0.5">
+                      {FOOTER_LINKS.map(({ label, href }) => (
+                        <li key={href}>
+                          <a
+                            href={href}
+                            className="text-[11px] win2k-link block py-0.5 hover:bg-[#000080] hover:text-white hover:no-underline px-1"
+                          >
+                            {label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </nav>
+
+                {/* System info */}
+                <div>
+                  <div className="win2k-groupbox">
+                    <span className="win2k-groupbox-label">Thông Tin Hệ Thống</span>
+                    <div className="pt-1 win2k-sunken p-2 bg-black">
+                      <p className="text-[10px] text-green-400 font-mono">Microsoft(R) Windows(R) 2000</p>
+                      <p className="text-[10px] text-green-400 font-mono">Version 5.00.2195</p>
+                      <p className="text-[10px] text-green-400 font-mono">© 2026 ARCHITECT.AI</p>
+                      <p className="text-[10px] text-yellow-300 font-mono mt-1">
+                        Built with ♥ &amp; AI Power
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="win2k-statusbar">
+              <div className="win2k-sunken px-2 flex-1 text-[10px]">Xong</div>
+              <div className="win2k-sunken px-2 text-[10px] hidden md:block">© 2026 ARCHITECT.AI</div>
+              <div className="win2k-sunken px-2 text-[10px] hidden md:block">Internet</div>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* ——— Bottom row ——— */}
-        <div className="flex flex-col items-center justify-between gap-2 text-center text-[0.775rem] text-text-faint md:flex-row">
-          <p>© 2026 ARCHITECT.AI. All rights reserved.</p>
-          <p>
-            Built with <span aria-label="tình yêu" className="text-red-500">♥</span> &amp; AI Power
-          </p>
+      {/* ——— Windows Taskbar ——— */}
+      <div className="win2k-taskbar sticky bottom-0 z-[900]">
+        <div className="flex items-center h-[30px] px-1 gap-1">
+          {/* Start button */}
+          <a
+            href="#home"
+            className="win2k-btn flex items-center gap-1 h-[22px] px-2 min-w-0 font-bold text-[11px]"
+            aria-label="Start"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+              <rect x="0" y="0" width="7" height="7" fill="#FF0000" />
+              <rect x="9" y="0" width="7" height="7" fill="#00FF00" />
+              <rect x="0" y="9" width="7" height="7" fill="#0000FF" />
+              <rect x="9" y="9" width="7" height="7" fill="#FFFF00" />
+            </svg>
+            <span>Start</span>
+          </a>
+
+          {/* Separator */}
+          <div className="win2k-separator h-5" aria-hidden="true" />
+
+          {/* Taskbar window buttons */}
+          {TASKBAR_BUTTONS.map(({ label, icon, href }) => (
+            <a
+              key={label}
+              href={href}
+              className="win2k-btn flex items-center gap-1 h-[22px] px-2 min-w-0 text-[10px] hidden sm:flex max-w-[120px] overflow-hidden"
+            >
+              <span aria-hidden="true">{icon}</span>
+              <span className="truncate">{label}</span>
+            </a>
+          ))}
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* System tray */}
+          <div className="flex items-center gap-1">
+            {/* Network icon */}
+            <div className="win2k-sunken px-1 h-[20px] flex items-center" title="Kết nối mạng">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000080" strokeWidth="2" aria-hidden="true">
+                <path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/>
+              </svg>
+            </div>
+            {/* Volume icon */}
+            <div className="win2k-sunken px-1 h-[20px] flex items-center" title="Âm lượng">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              </svg>
+            </div>
+            {/* Clock */}
+            <div
+              className="win2k-sunken px-2 h-[20px] flex items-center text-[11px] font-bold text-black select-none"
+              aria-label={`Thời gian: ${time}`}
+            >
+              {time}
+            </div>
+          </div>
         </div>
       </div>
     </footer>

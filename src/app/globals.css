@@ -1,84 +1,63 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ARCHITECT.AI — Tailwind v4 Design Tokens + Custom Styles
+   ARCHITECT.AI — Windows 2000 Classic Theme
    ============================================================ */
 
 @theme inline {
-  /* ——— Primary / Accent palette ——— */
-  --color-primary: #7c3aed;
-  --color-primary-light: #a855f7;
-  --color-primary-glow: rgba(124, 58, 237, 0.25);
-  --color-accent: #06b6d4;
-  --color-accent-glow: rgba(6, 182, 212, 0.2);
+  /* ——— Win2K Silver / Classic palette ——— */
+  --color-primary: #000080;          /* Classic Windows blue title bar */
+  --color-primary-light: #1084d0;    /* Lighter blue */
+  --color-primary-glow: rgba(0, 0, 128, 0.15);
+  --color-accent: #008080;           /* Classic teal/cyan */
+  --color-accent-glow: rgba(0, 128, 128, 0.15);
 
   /* ——— Backgrounds ——— */
-  --color-bg: #07070f;
-  --color-bg-2: #0d0d1a;
-  --color-bg-card: rgba(15, 15, 30, 0.8);
+  --color-bg: #d4d0c8;               /* Classic Windows silver-gray */
+  --color-bg-2: #c0c0c0;             /* Slightly darker silver */
+  --color-bg-card: #d4d0c8;          /* Dialog background */
+  --color-bg-desktop: #008080;       /* Windows 2000 teal desktop */
 
-  /* ——— Borders ——— */
-  --color-border: rgba(124, 58, 237, 0.15);
-  --color-border-hover: rgba(124, 58, 237, 0.4);
+  /* ——— Borders / bevels ——— */
+  --color-border: #808080;
+  --color-border-hover: #000080;
+  --color-bevel-light: #ffffff;
+  --color-bevel-dark: #404040;
+  --color-bevel-mid: #808080;
 
   /* ——— Text ——— */
-  --color-text: #f1f0ff;
-  --color-text-muted: rgba(241, 240, 255, 0.55);
-  --color-text-faint: rgba(241, 240, 255, 0.3);
+  --color-text: #000000;
+  --color-text-muted: #444444;
+  --color-text-faint: #808080;
+  --color-text-title-bar: #ffffff;
 
   /* ——— Fonts ——— */
-  --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  --font-sans: var(--font-tahoma), "Tahoma", "MS Sans Serif", Arial, sans-serif;
+  --font-display: var(--font-tahoma), "Tahoma", "MS Sans Serif", Arial, sans-serif;
 
-  /* ——— Custom keyframe animations ——— */
-  --animate-orb-float: orb-float 8s ease-in-out infinite;
-  --animate-pulse-dot: pulse-dot 2s infinite;
-  --animate-avatar-glow: avatar-glow 3s ease-in-out infinite;
-  --animate-ring-rotate: ring-rotate 8s linear infinite;
-  --animate-pill-float: pill-float 4s ease-in-out infinite;
-  --animate-scroll-wheel: scroll-wheel 2s ease-in-out infinite;
-  --animate-slide-in: slide-in 0.3s ease;
+  /* ——— Animations ——— */
+  --animate-slide-in: slide-in 0.15s ease;
+  --animate-blink: blink 1s step-end infinite;
 }
 
 /* ——— Keyframes ——— */
-@keyframes orb-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%      { transform: translate(30px, -20px) scale(1.05); }
-  66%      { transform: translate(-20px, 15px) scale(0.95); }
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  50%      { opacity: 0.8; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-}
-
-@keyframes avatar-glow {
-  0%, 100% { opacity: 0.7; transform: scale(1); }
-  50%      { opacity: 1; transform: scale(1.05); }
-}
-
-@keyframes ring-rotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes pill-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
-}
-
-@keyframes scroll-wheel {
-  0%   { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(10px); opacity: 0; }
-}
-
 @keyframes slide-in {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -87,133 +66,402 @@
   to   { width: var(--pct); }
 }
 
-@keyframes count-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ——— Base Reset Overrides ——— */
+/* ——— Base Reset ——— */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px;
+  scroll-padding-top: 56px;
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: var(--color-bg-desktop);
   color: var(--color-text);
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 11px;
 }
 
-/* ——— Scrollbar ——— */
-::-webkit-scrollbar      { width: 6px; }
+/* ——— Win2K Scrollbar ——— */
+::-webkit-scrollbar      { width: 16px; height: 16px; }
 ::-webkit-scrollbar-track { background: var(--color-bg-2); }
-::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 3px; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-bevel-light);
+  border-left: 1px solid var(--color-bevel-light);
+  border-right: 1px solid var(--color-bevel-dark);
+  border-bottom: 1px solid var(--color-bevel-dark);
+}
+::-webkit-scrollbar-button {
+  background: var(--color-bg);
+  display: block;
+  height: 16px;
+  width: 16px;
+  border-top: 1px solid var(--color-bevel-light);
+  border-left: 1px solid var(--color-bevel-light);
+  border-right: 1px solid var(--color-bevel-dark);
+  border-bottom: 1px solid var(--color-bevel-dark);
+}
 
 /* ——— Focus Ring ——— */
 :focus-visible {
-  outline: 2px solid var(--color-primary-light);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline: 1px dotted #000000;
+  outline-offset: 1px;
 }
 
 /* ——— Utility Components ——— */
 @layer components {
-  /* Gradient text utility */
-  .gradient-text {
-    background: linear-gradient(135deg, #a855f7 0%, #06b6d4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+
+  /* Win2K raised bevel (button / panel) */
+  .win2k-raised {
+    border-top: 2px solid var(--color-bevel-light);
+    border-left: 2px solid var(--color-bevel-light);
+    border-right: 2px solid var(--color-bevel-dark);
+    border-bottom: 2px solid var(--color-bevel-dark);
+    background-color: var(--color-bg);
   }
 
-  /* Avatar ring with animated gradient border */
-  .avatar-ring {
+  /* Win2K sunken (input / well) */
+  .win2k-sunken {
+    border-top: 2px solid var(--color-bevel-dark);
+    border-left: 2px solid var(--color-bevel-dark);
+    border-right: 2px solid var(--color-bevel-light);
+    border-bottom: 2px solid var(--color-bevel-light);
+    background-color: #ffffff;
+  }
+
+  /* Win2K window title bar */
+  .win2k-titlebar {
+    background: linear-gradient(to right, #000080, #1084d0);
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 3px 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+
+  /* Win2K window title bar (inactive) */
+  .win2k-titlebar-inactive {
+    background: linear-gradient(to right, #7b7b7b, #b0b0b0);
+    color: #d4d0c8;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 3px 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Win2K title bar button (minimize / maximize / close) */
+  .win2k-titlebar-btn {
+    width: 16px;
+    height: 14px;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-bevel-light);
+    border-left: 1px solid var(--color-bevel-light);
+    border-right: 1px solid var(--color-bevel-dark);
+    border-bottom: 1px solid var(--color-bevel-dark);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .win2k-titlebar-btn:active {
+    border-top: 1px solid var(--color-bevel-dark);
+    border-left: 1px solid var(--color-bevel-dark);
+    border-right: 1px solid var(--color-bevel-light);
+    border-bottom: 1px solid var(--color-bevel-light);
+  }
+
+  /* Win2K button */
+  .win2k-btn {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    padding: 4px 16px;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    border-top: 2px solid var(--color-bevel-light);
+    border-left: 2px solid var(--color-bevel-light);
+    border-right: 2px solid var(--color-bevel-dark);
+    border-bottom: 2px solid var(--color-bevel-dark);
+    min-width: 75px;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .win2k-btn:hover {
+    background-color: #e0ddd5;
+  }
+  .win2k-btn:active,
+  .win2k-btn-pressed {
+    border-top: 2px solid var(--color-bevel-dark);
+    border-left: 2px solid var(--color-bevel-dark);
+    border-right: 2px solid var(--color-bevel-light);
+    border-bottom: 2px solid var(--color-bevel-light);
+    padding-top: 5px;
+    padding-left: 17px;
+  }
+  .win2k-btn-primary {
+    background-color: var(--color-bg);
+    font-weight: bold;
+  }
+
+  /* Win2K input */
+  .win2k-input {
+    background-color: #ffffff;
+    color: #000000;
+    border-top: 2px solid var(--color-bevel-dark);
+    border-left: 2px solid var(--color-bevel-dark);
+    border-right: 2px solid var(--color-bevel-light);
+    border-bottom: 2px solid var(--color-bevel-light);
+    padding: 2px 4px;
+    font-size: 11px;
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+  }
+  .win2k-input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Win2K window */
+  .win2k-window {
+    background-color: var(--color-bg);
+    border-top: 2px solid var(--color-bevel-light);
+    border-left: 2px solid var(--color-bevel-light);
+    border-right: 2px solid var(--color-bevel-dark);
+    border-bottom: 2px solid var(--color-bevel-dark);
+  }
+
+  /* Win2K menu bar */
+  .win2k-menubar {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-bevel-dark);
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-size: 11px;
+  }
+
+  /* Win2K menu item */
+  .win2k-menuitem {
+    padding: 2px 6px;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .win2k-menuitem:hover {
+    background-color: #000080;
+    color: #ffffff;
+  }
+
+  /* Win2K toolbar */
+  .win2k-toolbar {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-bevel-dark);
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  /* Win2K toolbar button */
+  .win2k-toolbar-btn {
+    width: 24px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
     border: 1px solid transparent;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4) border-box;
-    -webkit-mask:
-      linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .win2k-toolbar-btn:hover {
+    border-top: 1px solid var(--color-bevel-light);
+    border-left: 1px solid var(--color-bevel-light);
+    border-right: 1px solid var(--color-bevel-dark);
+    border-bottom: 1px solid var(--color-bevel-dark);
+    background-color: var(--color-bg);
   }
 
-  /* Skill fill transition */
+  /* Win2K separator */
+  .win2k-separator {
+    width: 1px;
+    height: 18px;
+    background: linear-gradient(to bottom, var(--color-bevel-dark), var(--color-bevel-dark));
+    box-shadow: 1px 0 0 var(--color-bevel-light);
+    margin: 0 3px;
+    flex-shrink: 0;
+  }
+
+  /* Win2K progress bar */
+  .win2k-progress-track {
+    height: 16px;
+    background-color: #ffffff;
+    border-top: 1px solid var(--color-bevel-dark);
+    border-left: 1px solid var(--color-bevel-dark);
+    border-right: 1px solid var(--color-bevel-light);
+    border-bottom: 1px solid var(--color-bevel-light);
+    overflow: hidden;
+  }
+  .win2k-progress-fill {
+    height: 100%;
+    background: repeating-linear-gradient(
+      to right,
+      #000080 0px,
+      #000080 8px,
+      #3366cc 8px,
+      #3366cc 10px
+    );
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .win2k-progress-fill.animated {
+    width: var(--pct);
+  }
+
+  /* Tag/badge */
+  .win2k-tag {
+    background-color: #000080;
+    color: #ffffff;
+    font-size: 10px;
+    padding: 1px 6px;
+    font-family: inherit;
+    border: 1px solid #000040;
+  }
+
+  /* Status bar */
+  .win2k-statusbar {
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-bevel-dark);
+    padding: 2px 4px;
+    font-size: 11px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Win2K groupbox */
+  .win2k-groupbox {
+    border: 1px solid var(--color-bevel-mid);
+    padding: 12px 10px 10px;
+    position: relative;
+    margin-top: 8px;
+  }
+  .win2k-groupbox-label {
+    position: absolute;
+    top: -7px;
+    left: 8px;
+    background-color: var(--color-bg);
+    padding: 0 4px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  /* Reveal */
+  .reveal-element {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .reveal-element.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.05s; }
+  .reveal-delay-2 { transition-delay: 0.10s; }
+  .reveal-delay-3 { transition-delay: 0.15s; }
+
+  /* Skill fill */
   .skill-fill-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
-    border-radius: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      #000080 0px,
+      #000080 8px,
+      #3366cc 8px,
+      #3366cc 10px
+    );
     transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .skill-fill-bar.animated {
     width: var(--pct);
   }
 
-  /* Reveal animation */
-  .reveal-element {
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity 0.7s ease,
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Desktop icon */
+  .win2k-desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    cursor: pointer;
+    width: 72px;
+    text-align: center;
   }
-  .reveal-element.visible {
-    opacity: 1;
-    transform: translateY(0);
+  .win2k-desktop-icon:hover .icon-label,
+  .win2k-desktop-icon:focus .icon-label {
+    background-color: #000080;
+    color: #ffffff;
   }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-
-  /* Card hover glow */
-  .card-glow-hover {
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .card-glow-hover:hover {
-    border-color: var(--color-border-hover);
-    transform: translateY(-6px);
-    box-shadow:
-      0 0 40px var(--color-primary-glow),
-      0 4px 24px rgba(0, 0, 0, 0.4),
-      0 1px 4px rgba(0, 0, 0, 0.2);
+  .icon-label {
+    font-size: 10px;
+    color: #ffffff;
+    text-shadow: 1px 1px 0px #000000, -1px -1px 0px #000000, 1px -1px 0px #000000, -1px 1px 0px #000000;
+    word-break: break-word;
+    line-height: 1.2;
+    padding: 1px 2px;
   }
 
-  /* Feature card shift */
-  .feature-shift:hover {
-    border-color: var(--color-border-hover);
-    background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(6,182,212,0.05));
-    transform: translateX(4px);
+  /* Link decoration Win2K style */
+  .win2k-link {
+    color: #000080;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .win2k-link:hover {
+    color: #0000ff;
+  }
+  .win2k-link:visited {
+    color: #800080;
   }
 
-  /* Service link arrow */
-  .service-arrow {
-    transition: gap 0.15s ease;
-  }
-  .service-arrow:hover {
-    gap: 0.65rem;
+  /* Win2K taskbar */
+  .win2k-taskbar {
+    background: linear-gradient(to bottom, var(--color-bg) 0%, #a0a0a0 100%);
+    border-top: 2px solid var(--color-bevel-light);
   }
 
-  /* Grid background overlay */
-  .grid-overlay {
-    background-image:
-      linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
+  /* Gradient text - repurposed for Win2K selected state */
+  .gradient-text {
+    color: var(--color-primary);
+    font-weight: bold;
   }
 
-  /* Custom select arrow */
+  /* Form select */
   .form-select-custom {
     -webkit-appearance: none;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a855f7' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23000000' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 1rem center;
+    background-position: right 4px center;
+    padding-right: 20px;
   }
 }
 
 /* ——— Print ——— */
 @media print {
-  nav, .scroll-indicator, .tech-pills, .orb { display: none !important; }
-  .hero { min-height: auto !important; padding-top: 1rem !important; }
+  nav, .win2k-taskbar { display: none !important; }
 }

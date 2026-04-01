@@ -1,24 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Chatbot from "@/components/ui/Chatbot";
 
-/* ——— Google Fonts loaded via next/font (self-hosted, no CLS) ——— */
+/* ——— Google Font: Inter as Tahoma substitute (clean, readable, small size) ——— */
 const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin", "vietnamese"],
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+  variable: "--font-tahoma",
   subsets: ["latin", "vietnamese"],
   display: "swap",
 });
 
 /* ——— SEO Metadata ——— */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://architect.ai"), // Update to your domain
+  metadataBase: new URL("https://architect.ai"),
   title: {
     default: "Nguyễn Đức Kiên | Chuyên Gia Tối Ưu Vận Hành AI",
     template: "%s | Nguyễn Đức Kiên AI",
@@ -44,7 +38,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Nguyễn Đức Kiên | Chuyên Gia AI & Tự động hóa",
-    description: "Kiến tạo tương lai của doanh nghiệp thông qua hệ thống AI thông minh và quy trình vận hành tinh gọn.",
+    description:
+      "Kiến tạo tương lai của doanh nghiệp thông qua hệ thống AI thông minh và quy trình vận hành tinh gọn.",
     url: "https://architect.ai",
     siteName: "Nguyễn Đức Kiên AI",
     locale: "vi_VN",
@@ -81,11 +76,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="vi"
-      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
-    >
-      <body className="min-h-screen overflow-x-hidden font-sans leading-relaxed text-text bg-bg selection:bg-primary/30 selection:text-white">
+    <html lang="vi" className={`${inter.variable}`}>
+      <body className="min-h-screen overflow-x-hidden font-sans leading-normal text-text bg-[#008080] selection:bg-primary selection:text-white">
         {children}
         <Chatbot />
       </body>

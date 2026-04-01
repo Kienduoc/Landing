@@ -23,43 +23,13 @@ const CONTACT_METHODS = [
   },
   {
     id: "calendly",
-    icon: "📅",
+    icon: "Cal",
     label: "Calendly",
     value: "Đặt lịch tư vấn miễn phí 30 phút",
     href: "https://calendly.com",
     external: true,
   },
 ] as const;
-
-/* ——— Contact method link (extracted to respect Rules of Hooks) ——— */
-function ContactMethodLink({
-  method,
-  index,
-}: {
-  method: (typeof CONTACT_METHODS)[number];
-  index: number;
-}) {
-  const [ref, vis] = useInView<HTMLAnchorElement>();
-  return (
-    <a
-      ref={ref}
-      href={method.href}
-      target={method.external ? "_blank" : undefined}
-      rel={method.external ? "noopener noreferrer" : undefined}
-      id={`contact-${method.id}`}
-      className={`feature-shift reveal-element ${vis ? "visible" : ""} reveal-delay-${(index % 3) + 1} flex items-center gap-4 rounded-lg border border-border bg-bg-card p-4 backdrop-blur-[10px] transition-all duration-250`}
-    >
-      <div className="flex size-[42px] shrink-0 items-center justify-center rounded-md border border-border bg-primary-glow text-base font-bold text-primary-light" aria-hidden="true">
-        {method.icon}
-      </div>
-      <div className="flex flex-1 flex-col gap-0.5">
-        <span className="text-[0.7rem] uppercase tracking-[0.08em] text-text-faint">{method.label}</span>
-        <span className="text-[0.875rem] font-medium">{method.value}</span>
-      </div>
-      <span className="text-text-faint transition-all duration-150 group-hover:translate-x-1 group-hover:text-primary-light" aria-hidden="true">→</span>
-    </a>
-  );
-}
 
 export default function Contact() {
   const [titleRef, titleVisible] = useInView<HTMLHeadingElement>();
@@ -94,22 +64,15 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Gửi yêu cầu thất bại.");
-      }
-
+      if (!response.ok) throw new Error(result.error || "Gửi yêu cầu thất bại.");
       setSubmitted(true);
       form.reset();
-
-      // Clear success message after 10s
       setTimeout(() => setSubmitted(false), 10000);
     } catch (err: any) {
       setError(err.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");
     } finally {
-      setSubmitting(true); // Keep submitting state for a moment for transition
+      setSubmitting(true);
       setTimeout(() => setSubmitting(false), 500);
     }
   };
@@ -117,147 +80,263 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative bg-bg-2 px-[clamp(1.5rem,5vw,2rem)] py-[clamp(5rem,10vw,8rem)]"
+      className="bg-[#008080] px-4 py-8"
       aria-label="Liên hệ"
     >
-      {/* Ambient */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_50%_0%,rgba(124,58,237,0.08)_0%,transparent_70%)]"
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-[1100px]">
         {/* Section label */}
-        <div className="mb-10 flex items-center gap-4 text-[0.75rem] font-semibold uppercase tracking-[0.15em] text-text-muted">
-          <span className="h-px flex-1 bg-border" aria-hidden="true" />
-          <span>04 / Liên Hệ</span>
-          <span className="h-px flex-1 bg-border" aria-hidden="true" />
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-px flex-1 bg-[#006060]" aria-hidden="true" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#c0e8e8]">
+            04 / Liên Hệ
+          </span>
+          <div className="h-px flex-1 bg-[#006060]" aria-hidden="true" />
         </div>
 
-        <div className="grid items-start gap-16 lg:grid-cols-2">
-          {/* ——— Left: info ——— */}
-          <div>
-            <h2
-              ref={titleRef}
-              className={`mb-4 font-display text-[clamp(2rem,5vw,3.25rem)] font-bold leading-[1.15] tracking-tight reveal-element ${titleVisible ? "visible" : ""}`}
-            >
-              Khởi Chạy
-              <br />
-              <span className="gradient-text">Giao Thức Hợp Tác</span>
-            </h2>
-            <p className="mb-10 text-base leading-[1.7] text-text-muted">
-              Thảo luận về các yêu cầu vận hành của bạn với chuyên gia. Tôi phản hồi trong vòng{" "}
-              <strong className="font-semibold text-text">24 giờ</strong>.
-            </p>
+        <div className="grid gap-4 lg:grid-cols-2 items-start">
 
-            {/* Contact methods */}
-            <div className="flex flex-col gap-3.5">
-              {CONTACT_METHODS.map((m, idx) => (
-                <ContactMethodLink key={m.id} method={m} index={idx} />
+          {/* ——— Left: Contact info window ——— */}
+          <div className="win2k-window">
+            <div className="win2k-titlebar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
+                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <span className="flex-1 text-[11px] font-bold text-white">
+                Liên Hệ - Outlook Express
+              </span>
+              <div className="flex gap-0.5">
+                <button className="win2k-titlebar-btn" aria-label="Minimize">_</button>
+                <button className="win2k-titlebar-btn" aria-label="Maximize">
+                  <span className="block w-2 h-2 border border-black" />
+                </button>
+                <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
+              </div>
+            </div>
+
+            {/* Toolbar */}
+            <div className="win2k-toolbar">
+              {["Mới", "Trả lời", "Chuyển tiếp", "In", "Xóa"].map((btn) => (
+                <button key={btn} className="win2k-btn text-[10px] px-2 py-0.5 min-w-0">{btn}</button>
               ))}
+            </div>
+
+            <div className="p-5 bg-[#d4d0c8]">
+              <h2
+                ref={titleRef}
+                className={`text-[20px] font-bold text-[#000080] mb-1 reveal-element ${titleVisible ? "visible" : ""}`}
+              >
+                Khởi Chạy Giao Thức Hợp Tác
+              </h2>
+              <p className="text-[11px] text-black mb-5">
+                Thảo luận về yêu cầu của bạn. Tôi phản hồi trong vòng{" "}
+                <strong>24 giờ</strong>.
+              </p>
+
+              {/* Contact methods */}
+              <div className="flex flex-col gap-2">
+                {CONTACT_METHODS.map((method, index) => (
+                  <a
+                    key={method.id}
+                    href={method.href}
+                    target={method.external ? "_blank" : undefined}
+                    rel={method.external ? "noopener noreferrer" : undefined}
+                    className={`win2k-sunken flex items-center gap-3 p-2 bg-white hover:bg-[#000080] group cursor-pointer reveal-element reveal-delay-${(index % 3) + 1} visible`}
+                  >
+                    <div className="win2k-raised flex size-9 shrink-0 items-center justify-center text-sm font-bold text-[#000080] group-hover:text-[#000080]">
+                      {method.icon}
+                    </div>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <span className="text-[9px] uppercase tracking-wider text-[#444] group-hover:text-[#ccc]">
+                        {method.label}
+                      </span>
+                      <span className="text-[11px] font-bold text-black group-hover:text-white truncate">
+                        {method.value}
+                      </span>
+                    </div>
+                    <span className="text-[#808080] group-hover:text-white text-sm" aria-hidden="true">&#8594;</span>
+                  </a>
+                ))}
+              </div>
+
+              {/* Info panel */}
+              <div className="mt-4 win2k-groupbox">
+                <span className="win2k-groupbox-label">Thông Tin Liên Hệ</span>
+                <div className="pt-1 win2k-sunken p-2 bg-white">
+                  <table className="w-full text-[10px]">
+                    <tbody>
+                      <tr><td className="font-bold text-black pr-2">Tên:</td><td className="text-[#000080]">Nguyễn Đức Kiên</td></tr>
+                      <tr><td className="font-bold text-black pr-2">Công ty:</td><td>Architect AI Studio</td></tr>
+                      <tr><td className="font-bold text-black pr-2">Phản hồi:</td><td className="text-green-700">{"< 24 giờ"}</td></tr>
+                      <tr><td className="font-bold text-black pr-2">Trạng thái:</td><td className="text-green-700 font-bold">Online</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ——— Right: form ——— */}
-          <div className="rounded-2xl border border-border bg-bg-card p-8 backdrop-blur-2xl">
-            <form id="contact-form" noValidate onSubmit={handleSubmit} className="flex flex-col gap-5" aria-label="Form liên hệ">
-              {/* Name */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="contact-name" className="text-[0.8rem] font-medium uppercase tracking-[0.08em] text-text-muted">
-                  Họ và tên
-                </label>
-                <input
-                  type="text"
-                  id="contact-name"
-                  name="name"
-                  placeholder="Nguyễn Văn A"
-                  required
-                  autoComplete="name"
-                  className="w-full rounded-md border border-border bg-bg/60 px-4 py-3 text-[0.9rem] text-text placeholder:text-text-faint transition-all focus:border-primary focus:shadow-[0_0_0_3px_var(--color-primary-glow)] focus:outline-none"
-                />
+          {/* ——— Right: Form as a Win2K dialog ——— */}
+          <div className="win2k-window">
+            <div className="win2k-titlebar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
+                <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
+              <span className="flex-1 text-[11px] font-bold text-white">
+                Gửi Yêu Cầu - New Message
+              </span>
+              <div className="flex gap-0.5">
+                <button className="win2k-titlebar-btn" aria-label="Minimize">_</button>
+                <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
               </div>
+            </div>
 
-              {/* Email */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="contact-email-input" className="text-[0.8rem] font-medium uppercase tracking-[0.08em] text-text-muted">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="contact-email-input"
-                  name="email"
-                  placeholder="phnguyenduckien@gmail.com"
-                  required
-                  autoComplete="email"
-                  className="w-full rounded-md border border-border bg-bg/60 px-4 py-3 text-[0.9rem] text-text placeholder:text-text-faint transition-all focus:border-primary focus:shadow-[0_0_0_3px_var(--color-primary-glow)] focus:outline-none"
-                />
-              </div>
+            {/* Form toolbar */}
+            <div className="win2k-toolbar">
+              <button type="submit" form="contact-form" className="win2k-btn text-[10px] px-3 py-0.5 min-w-0 font-bold">
+                Gửi
+              </button>
+              <div className="win2k-separator" aria-hidden="true" />
+              <button className="win2k-btn text-[10px] px-2 py-0.5 min-w-0">Cắt</button>
+              <button className="win2k-btn text-[10px] px-2 py-0.5 min-w-0">Sao chép</button>
+              <button className="win2k-btn text-[10px] px-2 py-0.5 min-w-0">Dán</button>
+            </div>
 
-              {/* Service select */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="contact-service" className="text-[0.8rem] font-medium uppercase tracking-[0.08em] text-text-muted">
-                  Dịch vụ quan tâm
-                </label>
-                <select
-                  id="contact-service"
-                  name="service"
-                  required
-                  defaultValue=""
-                  className="form-select-custom w-full cursor-pointer rounded-md border border-border bg-bg/60 px-4 py-3 pr-10 text-[0.9rem] text-text transition-all focus:border-primary focus:shadow-[0_0_0_3px_var(--color-primary-glow)] focus:outline-none [&>option]:bg-bg-2 [&>option]:text-text"
-                >
-                  <option value="" disabled>Chọn dịch vụ...</option>
-                  <option value="automation">Tự Động Hóa Quy Trình AI</option>
-                  <option value="strategy">Chiến Lược Kinh Doanh &amp; AI</option>
-                  <option value="coaching">Huấn Luyện Hiệu Suất Cá Nhân</option>
-                  <option value="other">Khác</option>
-                </select>
-              </div>
+            <div className="p-4 bg-[#d4d0c8]">
+              <form
+                id="contact-form"
+                noValidate
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-3"
+                aria-label="Form liên hệ"
+              >
+                {/* Name */}
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="contact-name"
+                    className="text-[11px] font-bold text-black w-20 text-right shrink-0"
+                  >
+                    Họ và tên:
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    placeholder="Nguyễn Văn A"
+                    required
+                    autoComplete="name"
+                    className="win2k-input flex-1"
+                  />
+                </div>
 
-              {/* Message */}
-              <div className="flex flex-col gap-2">
-                <label htmlFor="contact-message" className="text-[0.8rem] font-medium uppercase tracking-[0.08em] text-text-muted">
-                  Mô tả nhu cầu của bạn
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  placeholder="Hãy chia sẻ thách thức bạn đang gặp phải và mục tiêu bạn muốn đạt được..."
-                  rows={4}
-                  required
-                  className="min-h-[110px] w-full resize-y rounded-md border border-border bg-bg/60 px-4 py-3 text-[0.9rem] text-text placeholder:text-text-faint transition-all focus:border-primary focus:shadow-[0_0_0_3px_var(--color-primary-glow)] focus:outline-none"
-                />
-              </div>
+                {/* Email */}
+                <div className="flex items-center gap-2">
+                  <label
+                    htmlFor="contact-email-input"
+                    className="text-[11px] font-bold text-black w-20 text-right shrink-0"
+                  >
+                    Email:
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email-input"
+                    name="email"
+                    placeholder="phnguyenduckien@gmail.com"
+                    required
+                    autoComplete="email"
+                    className="win2k-input flex-1"
+                  />
+                </div>
 
-              {/* Submit */}
+                {/* Separator line */}
+                <div className="h-px bg-[#808080] shadow-[0_1px_0_white]" aria-hidden="true" />
+
+                {/* Service */}
+                <div className="flex items-start gap-2">
+                  <label
+                    htmlFor="contact-service"
+                    className="text-[11px] font-bold text-black w-20 text-right shrink-0 mt-1"
+                  >
+                    Dịch vụ:
+                  </label>
+                  <select
+                    id="contact-service"
+                    name="service"
+                    required
+                    defaultValue=""
+                    className="win2k-input form-select-custom flex-1"
+                  >
+                    <option value="" disabled>Chọn dịch vụ...</option>
+                    <option value="automation">Tự Động Hóa Quy Trình AI</option>
+                    <option value="strategy">Chiến Lược Kinh Doanh & AI</option>
+                    <option value="coaching">Huấn Luyện Hiệu Suất Cá Nhân</option>
+                    <option value="other">Khác</option>
+                  </select>
+                </div>
+
+                {/* Message */}
+                <div className="flex items-start gap-2">
+                  <label
+                    htmlFor="contact-message"
+                    className="text-[11px] font-bold text-black w-20 text-right shrink-0 mt-1"
+                  >
+                    Nội dung:
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    placeholder="Hãy chia sẻ thách thức bạn đang gặp phải..."
+                    rows={5}
+                    required
+                    className="win2k-input flex-1 resize-y min-h-[90px]"
+                  />
+                </div>
+
+                {/* Success */}
+                {submitted && (
+                  <div
+                    className="win2k-window p-3 border-[#008000]"
+                    role="alert"
+                    style={{ borderColor: "#008000" }}
+                  >
+                    <div className="win2k-titlebar" style={{ background: "linear-gradient(to right, #008000, #00aa00)" }}>
+                      <span className="text-[11px] font-bold text-white flex-1">Thông Báo</span>
+                    </div>
+                    <div className="p-3 flex items-center gap-3 bg-[#d4d0c8]">
+                      <div className="text-2xl" aria-hidden="true">&#10003;</div>
+                      <p className="text-[11px] text-black">Yêu cầu đã được gửi! Tôi sẽ liên hệ lại sớm.</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Error */}
+                {error && (
+                  <div className="win2k-window p-0" role="alert">
+                    <div className="win2k-titlebar" style={{ background: "linear-gradient(to right, #cc0000, #ff3333)" }}>
+                      <span className="text-[11px] font-bold text-white flex-1">Lỗi</span>
+                    </div>
+                    <div className="p-3 flex items-center gap-3 bg-[#d4d0c8]">
+                      <div className="text-2xl" aria-hidden="true">&#10007;</div>
+                      <p className="text-[11px] text-black">{error}</p>
+                    </div>
+                  </div>
+                )}
+              </form>
+            </div>
+
+            {/* Dialog buttons */}
+            <div className="flex justify-end gap-2 p-3 border-t border-[#808080] bg-[#d4d0c8]">
               <button
                 type="submit"
+                form="contact-form"
                 disabled={submitting}
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-linear-to-br from-primary to-accent px-7 py-3.5 text-[0.9rem] font-semibold text-white shadow-[0_0_20px_var(--color-primary-glow)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_var(--color-primary-glow),0_8px_24px_rgba(0,0,0,0.3)] disabled:opacity-70"
+                className="win2k-btn win2k-btn-primary text-[11px] px-6 disabled:opacity-60"
               >
-                <span>{submitting ? "Đang gửi..." : "Gửi Yêu Cầu"}</span>
-                <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                {submitting ? "Đang gửi..." : "Gửi Yêu Cầu"}
               </button>
-
-              {/* Success message */}
-              {submitted && (
-                <div
-                  className="flex items-center gap-2 rounded-md border border-green-500/30 bg-green-500/10 px-4 py-3.5 text-[0.875rem] font-medium text-green-500 animate-slide-in"
-                  role="alert"
-                >
-                  <span className="text-lg">✓</span> Yêu cầu đã được gửi! Tôi sẽ liên hệ lại sớm.
-                </div>
-              )}
-
-              {/* Error message */}
-              {error && (
-                <div
-                  className="flex items-center gap-2 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-[0.875rem] font-medium text-red-500 animate-slide-in"
-                  role="alert"
-                >
-                  <span className="text-lg">✕</span> {error}
-                </div>
-              )}
-            </form>
+              <button type="reset" form="contact-form" className="win2k-btn text-[11px] px-4">
+                Hủy
+              </button>
+            </div>
           </div>
         </div>
       </div>
