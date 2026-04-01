@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useInView } from "@/hooks/useInView";
 
-/* ——— Animated Counter sub-component ——— */
+/* ——— Animated Counter ——— */
 function Counter({ target, suffix }: { target: number; suffix: string }) {
   const [count, setCount] = useState(0);
   const [ref, isInView] = useInView<HTMLSpanElement>({ threshold: 0.5 });
@@ -13,199 +13,291 @@ function Counter({ target, suffix }: { target: number; suffix: string }) {
   useEffect(() => {
     if (!isInView || hasRun.current) return;
     hasRun.current = true;
-
-    const duration = 2000;
+    const duration = 1500;
     const fps = 60;
     const totalFrames = Math.round((duration / 1000) * fps);
     let frame = 0;
-
     const id = setInterval(() => {
       frame++;
       const progress = frame / totalFrames;
-      // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.ceil(eased * target));
-
-      if (frame >= totalFrames) {
-        clearInterval(id);
-        setCount(target);
-      }
+      if (frame >= totalFrames) { clearInterval(id); setCount(target); }
     }, duration / totalFrames);
-
     return () => clearInterval(id);
   }, [isInView, target]);
 
   return (
-    <span ref={ref} className="gradient-text inline font-display text-[2rem] font-extrabold leading-none">
+    <span ref={ref} className="text-[#000080] font-bold text-2xl">
       {count}
-      <span className="gradient-text text-[1.2rem] font-bold">{suffix}</span>
+      <span className="text-base">{suffix}</span>
     </span>
   );
 }
 
-/* ——— Tech pill data ——— */
-const TECH_PILLS = [
-  { label: "GPT-4o", className: "top-[5%] right-[-15%]" },
-  { label: "Claude AI", className: "top-[25%] right-[-20%] [animation-delay:0.5s]" },
-  { label: "n8n", className: "top-[55%] right-[-10%] [animation-delay:1s]" },
-  { label: "Make.com", className: "bottom-[20%] left-[-15%] [animation-delay:1.5s]" },
-  { label: "LangChain", className: "top-[15%] left-[-20%] [animation-delay:2s]" },
-] as const;
-
 export default function Hero() {
-  /* ——— Parallax on desktop ——— */
-  const visualRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 1024px)");
-    if (!mq.matches) return;
-
-    const onMove = (e: MouseEvent) => {
-      if (!visualRef.current) return;
-      const x = (window.innerWidth / 2 - e.pageX) / 50;
-      const y = (window.innerHeight / 2 - e.pageY) / 50;
-      visualRef.current.style.transform = `translate(${x}px, ${y}px)`;
-    };
-    const onLeave = () => {
-      if (visualRef.current) visualRef.current.style.transform = "translate(0,0)";
-    };
-
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseleave", onLeave);
-    return () => {
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
-
   return (
     <section
       id="home"
-      className="relative flex min-h-screen flex-col overflow-hidden pt-[72px]"
+      className="min-h-screen bg-[#008080] pt-[72px] px-4 py-8 flex items-start justify-center"
       aria-label="Hero section"
     >
-      {/* ——— Background orbs ——— */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div className="orb absolute -top-[200px] -right-[100px] size-[600px] rounded-full bg-[radial-gradient(circle,#7c3aed_0%,transparent_70%)] opacity-30 blur-[80px] animate-orb-float" />
-        <div className="orb absolute -left-[100px] bottom-0 size-[400px] rounded-full bg-[radial-gradient(circle,#06b6d4_0%,transparent_70%)] opacity-30 blur-[80px] animate-orb-float [animation-direction:reverse] [animation-duration:10s]" />
-        <div className="orb absolute top-1/2 left-[40%] size-[300px] rounded-full bg-[radial-gradient(circle,#a855f7_0%,transparent_70%)] opacity-30 blur-[80px] animate-orb-float [animation-delay:2s] [animation-duration:12s]" />
-        <div className="grid-overlay absolute inset-0" />
-      </div>
+      {/* ——— Desktop area with scattered windows ——— */}
+      <div className="w-full max-w-[1100px]">
 
-      {/* ——— Content ——— */}
-      <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-1 flex-col justify-center px-[clamp(1.5rem,5vw,2rem)] pt-12 pb-8">
-        {/* Badge */}
-        <div className="mb-10 inline-flex w-fit items-center gap-2 self-start rounded-full border border-border bg-primary/[0.06] px-4 py-1.5 text-[0.8rem] text-text-muted backdrop-blur-[10px] max-md:self-center">
-          <span className="size-[7px] rounded-full bg-green-500 animate-pulse-dot" />
-          <span>Đang nhận dự án mới · 2026</span>
-        </div>
-
-        {/* Grid: text | visual */}
-        <div className="grid items-center gap-16 lg:grid-cols-2 max-md:text-center">
-          {/* ——— Text column ——— */}
-          <div className="max-md:order-2">
-            <h1 className="mb-6 font-display text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.1] tracking-tight">
-              <span className="block">Tối Ưu Hóa</span>
-              <span className="gradient-text block">Hiệu Suất Doanh Nghiệp</span>
-              <span className="block">Với Tự Động Hóa AI</span>
-            </h1>
-
-            <p className="mx-auto mb-10 max-w-[520px] text-[clamp(1rem,2vw,1.15rem)] leading-[1.75] text-text-muted max-md:mx-auto lg:mx-0">
-              Chuyên gia về <strong className="font-semibold text-text">Hiệu suất Doanh nghiệp</strong> và{" "}
-              <strong className="font-semibold text-text">Vận hành AI</strong>. Kiến tạo tương lai của logic kinh doanh có
-              khả năng mở rộng thông qua các giao thức thông minh.
+        {/* ——— Marquee announcement banner ——— */}
+        <div className="win2k-window mb-4 overflow-hidden">
+          <div className="win2k-titlebar">
+            <svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" className="shrink-0">
+              <rect x="0" y="0" width="7" height="7" fill="#FF0000" />
+              <rect x="9" y="0" width="7" height="7" fill="#00FF00" />
+              <rect x="0" y="9" width="7" height="7" fill="#0000FF" />
+              <rect x="9" y="9" width="7" height="7" fill="#FFFF00" />
+            </svg>
+            <span className="flex-1 text-[11px] font-bold text-white">Thông Báo Hệ Thống</span>
+            <button className="win2k-titlebar-btn" aria-label="Close">X</button>
+          </div>
+          <div className="bg-[#000080] py-1 overflow-hidden">
+            <p className="text-yellow-300 text-[11px] font-bold whitespace-nowrap animate-[marquee_18s_linear_infinite]">
+              *** ĐANG NHẬN DỰ ÁN MỚI - 2026 *** Chuyên gia AI Automation - n8n - LangChain - Claude - GPT-4o ***
+              Liên hệ ngay để được tư vấn miễn phí 30 phút! ***
             </p>
+          </div>
+        </div>
 
-            {/* CTA buttons */}
-            <div className="mb-12 flex flex-wrap gap-4 max-md:justify-center">
-              <a
-                href="#services"
-                className="group inline-flex items-center gap-2 rounded-full bg-linear-to-br from-primary to-accent px-7 py-3.5 text-[0.9rem] font-semibold text-white shadow-[0_0_20px_var(--color-primary-glow)] transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_var(--color-primary-glow),0_8px_24px_rgba(0,0,0,0.3)]"
-              >
-                <span>Khám Phá Dịch Vụ</span>
-                <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
-              </a>
-              <a
-                href="#portfolio"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-transparent px-7 py-3.5 text-[0.9rem] font-semibold text-text transition-all hover:-translate-y-0.5 hover:border-border-hover hover:bg-primary-glow"
-              >
-                Xem Dự Án
-              </a>
+        {/* ——— Main content grid ——— */}
+        <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+
+          {/* ——— Left: Main "My Computer" style window ——— */}
+          <div className="win2k-window">
+            {/* Title bar */}
+            <div className="win2k-titlebar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true" className="shrink-0">
+                <rect x="2" y="3" width="20" height="14" rx="1" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
+              <span className="flex-1 text-[11px] font-bold text-white">
+                Architect.AI - Trang Chủ - Microsoft Internet Explorer
+              </span>
+              <div className="flex items-center gap-0.5">
+                <button className="win2k-titlebar-btn" aria-label="Minimize">_</button>
+                <button className="win2k-titlebar-btn" aria-label="Maximize">
+                  <span className="block w-2 h-2 border border-black" />
+                </button>
+                <button className="win2k-titlebar-btn font-bold" aria-label="Close">X</button>
+              </div>
             </div>
 
-            {/* Stats */}
-            <div className="flex items-center gap-6 max-md:justify-center max-sm:flex-col max-sm:gap-3">
-              <div className="flex flex-col gap-0.5">
-                <Counter target={10} suffix="+" />
-                <span className="text-[0.72rem] font-medium uppercase tracking-wider text-text-muted">Năm kinh nghiệm</span>
+            {/* Toolbar */}
+            <div className="win2k-toolbar border-b border-[#808080]">
+              <button className="win2k-toolbar-btn" title="Back" aria-label="Back">&#8592;</button>
+              <button className="win2k-toolbar-btn" title="Forward" aria-label="Forward">&#8594;</button>
+              <button className="win2k-toolbar-btn" title="Stop" aria-label="Stop">&#9632;</button>
+              <button className="win2k-toolbar-btn" title="Refresh" aria-label="Refresh">&#8635;</button>
+              <button className="win2k-toolbar-btn" title="Home" aria-label="Home">&#127968;</button>
+              <div className="win2k-separator" aria-hidden="true" />
+              <button className="win2k-toolbar-btn" title="Search" aria-label="Search">&#128269;</button>
+              <button className="win2k-toolbar-btn" title="Favorites" aria-label="Favorites">&#9733;</button>
+              <div className="win2k-separator" aria-hidden="true" />
+              <div className="flex items-center gap-1 ml-1">
+                <span className="text-[10px] text-black">Địa chỉ:</span>
+                <div className="win2k-sunken px-2 py-0.5 text-[10px] flex-1 text-black min-w-0">
+                  http://architect.ai/
+                </div>
               </div>
-              <div className="h-10 w-px bg-border max-sm:hidden" aria-hidden="true" />
-              <div className="flex flex-col gap-0.5">
-                <Counter target={50} suffix="+" />
-                <span className="text-[0.72rem] font-medium uppercase tracking-wider text-text-muted">Dự án thành công</span>
+            </div>
+
+            {/* Content area */}
+            <div className="p-6 bg-white">
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                {/* Text content */}
+                <div className="flex-1">
+                  <h1 className="text-[28px] font-bold text-[#000080] mb-1 leading-tight">
+                    Tối Ưu Hóa Hiệu Suất Doanh Nghiệp
+                  </h1>
+                  <h2 className="text-[18px] font-bold text-[#008080] mb-4">
+                    Với Tự Động Hóa AI
+                  </h2>
+
+                  <p className="text-[12px] leading-relaxed text-black mb-3">
+                    Chuyên gia về <strong>Hiệu suất Doanh nghiệp</strong> và{" "}
+                    <strong>Vận hành AI</strong>. Kiến tạo tương lai của logic kinh doanh có
+                    khả năng mở rộng thông qua các giao thức thông minh.
+                  </p>
+                  <p className="text-[11px] text-[#444] mb-6">
+                    Phiên bản 1.0 · Cập nhật lần cuối: 01/04/2026 · Hỗ trợ: IE 5.0+, Netscape 4.7+
+                  </p>
+
+                  {/* CTA buttons — classic dialog style */}
+                  <div className="flex flex-wrap gap-3 mb-6">
+                    <a
+                      href="#services"
+                      className="win2k-btn win2k-btn-primary text-[11px] px-6"
+                    >
+                      Khám Phá Dịch Vụ
+                    </a>
+                    <a
+                      href="#portfolio"
+                      className="win2k-btn text-[11px] px-6"
+                    >
+                      Xem Dự Án
+                    </a>
+                    <a
+                      href="#contact"
+                      className="win2k-btn text-[11px] px-6"
+                    >
+                      Liên Hệ Ngay
+                    </a>
+                  </div>
+
+                  {/* Stats in groupbox */}
+                  <div className="win2k-groupbox">
+                    <span className="win2k-groupbox-label">Thống Kê Hệ Thống</span>
+                    <div className="flex flex-wrap gap-6 pt-1">
+                      <div className="flex flex-col gap-0.5">
+                        <Counter target={10} suffix="+" />
+                        <span className="text-[10px] text-[#444]">Năm kinh nghiệm</span>
+                      </div>
+                      <div className="w-px bg-[#808080] self-stretch" aria-hidden="true" />
+                      <div className="flex flex-col gap-0.5">
+                        <Counter target={50} suffix="+" />
+                        <span className="text-[10px] text-[#444]">Dự án thành công</span>
+                      </div>
+                      <div className="w-px bg-[#808080] self-stretch" aria-hidden="true" />
+                      <div className="flex flex-col gap-0.5">
+                        <Counter target={20} suffix="h/tuần" />
+                        <span className="text-[10px] text-[#444]">Được tiết kiệm/KH</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Avatar panel */}
+                <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                  <div className="win2k-sunken p-1 w-fit">
+                    <Image
+                      src="/assets/avatar.png"
+                      alt="Nguyễn Đức Kiên - AI Expert"
+                      width={200}
+                      height={200}
+                      priority
+                      className="block"
+                      style={{ imageRendering: "auto" }}
+                    />
+                  </div>
+                  <div className="win2k-window p-2 text-center w-full">
+                    <p className="text-[10px] font-bold text-black">Nguyễn Đức Kiên</p>
+                    <p className="text-[10px] text-[#000080]">AI Expert &amp; Consultant</p>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      <span className="w-2 h-2 rounded-full bg-green-500 inline-block" aria-hidden="true" />
+                      <span className="text-[10px] text-green-700">Online - Sẵn sàng hợp tác</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="h-10 w-px bg-border max-sm:hidden" aria-hidden="true" />
-              <div className="flex flex-col gap-0.5">
-                <Counter target={20} suffix="h/tuần" />
-                <span className="text-[0.72rem] font-medium uppercase tracking-wider text-text-muted">Được tiết kiệm/KH</span>
-              </div>
+            </div>
+
+            {/* Status bar */}
+            <div className="win2k-statusbar">
+              <div className="win2k-sunken px-2 flex-1 text-[10px]">Xong</div>
+              <div className="win2k-sunken px-2 text-[10px] w-24">Mạng cục bộ</div>
+              <div className="win2k-sunken px-2 text-[10px] w-16">100%</div>
             </div>
           </div>
 
-          {/* ——— Visual column ——— */}
-          <div ref={visualRef} className="relative flex items-center justify-center max-md:order-1">
-            {/* Avatar */}
-            <div className="relative size-[340px] shrink-0 max-md:size-[240px]">
-              {/* Glow */}
-              <div className="absolute -inset-5 rounded-full bg-[radial-gradient(ellipse,rgba(124,58,237,0.35)_0%,transparent_70%)] animate-avatar-glow" aria-hidden="true" />
-              {/* Ring */}
-              <div className="avatar-ring absolute -inset-2 rounded-full animate-ring-rotate" aria-hidden="true" />
-              {/* Image */}
-              <Image
-                src="/assets/avatar.png"
-                alt="AI Expert - Chuyên gia Vận hành AI"
-                width={380}
-                height={380}
-                priority
-                className="relative z-10 size-full rounded-full border-[3px] border-primary/30 object-cover"
-              />
-              {/* Status badge */}
-              <div
-                className="absolute bottom-2.5 left-1/2 z-20 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-bg/90 px-4 py-1.5 text-[0.75rem] font-medium text-green-500 backdrop-blur-[10px]"
-                aria-label="Trạng thái: Sẵn sàng"
-              >
-                <span className="size-1.5 rounded-full bg-green-500 animate-pulse-dot" aria-hidden="true" />
-                Sẵn sàng hợp tác
+          {/* ——— Right: Desktop Icons + info panels ——— */}
+          <div className="flex flex-col gap-3">
+
+            {/* Desktop Icons panel */}
+            <div className="win2k-window">
+              <div className="win2k-titlebar">
+                <span className="text-[11px] font-bold text-white flex-1">My Computer</span>
+                <button className="win2k-titlebar-btn" aria-label="Close">X</button>
+              </div>
+              <div className="p-3 bg-white grid grid-cols-3 gap-1">
+                {[
+                  { icon: "💻", label: "AI Systems" },
+                  { icon: "📊", label: "Analytics" },
+                  { icon: "🤖", label: "Automation" },
+                  { icon: "📁", label: "Projects" },
+                  { icon: "🔧", label: "Tools" },
+                  { icon: "📧", label: "Contact" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="win2k-desktop-icon cursor-pointer hover:bg-[#000080]/10 p-1"
+                  >
+                    <span className="text-2xl block text-center">{item.icon}</span>
+                    <span className="text-[10px] text-black text-center block leading-tight mt-0.5">
+                      {item.label}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Tech pills */}
-            <div className="pointer-events-none absolute inset-0 max-md:hidden" aria-label="Công nghệ sử dụng">
-              {TECH_PILLS.map(({ label, className }) => (
-                <div
-                  key={label}
-                  className={`absolute rounded-full border border-border bg-bg-2/90 px-3.5 py-1.5 text-[0.72rem] font-semibold text-text-muted backdrop-blur-[10px] animate-pill-float ${className}`}
-                >
-                  {label}
+            {/* System Properties style panel */}
+            <div className="win2k-window">
+              <div className="win2k-titlebar">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                  <path d="M12 2a10 10 0 110 20A10 10 0 0112 2zm0 4a1 1 0 00-1 1v5a1 1 0 002 0V7a1 1 0 00-1-1zm0 9a1.25 1.25 0 110 2.5A1.25 1.25 0 0112 15z"/>
+                </svg>
+                <span className="text-[11px] font-bold text-white flex-1">System Properties</span>
+                <button className="win2k-titlebar-btn" aria-label="Close">X</button>
+              </div>
+              <div className="p-3 bg-[#d4d0c8]">
+                <div className="flex gap-3 items-start mb-3">
+                  <svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true">
+                    <rect x="4" y="4" width="40" height="32" rx="2" fill="#c0c0c0" stroke="#808080" strokeWidth="1"/>
+                    <rect x="8" y="8" width="32" height="22" fill="#000080"/>
+                    <rect x="18" y="38" width="12" height="4" fill="#c0c0c0"/>
+                    <rect x="12" y="42" width="24" height="2" fill="#808080"/>
+                  </svg>
+                  <div>
+                    <p className="text-[10px] font-bold text-black">Microsoft Windows 2000</p>
+                    <p className="text-[10px] text-black">Professional</p>
+                    <p className="text-[10px] text-[#444]">Version 5.00.2195</p>
+                  </div>
                 </div>
-              ))}
+                <div className="border-t border-[#808080] pt-2">
+                  <p className="text-[10px] text-black"><strong>Đăng ký cho:</strong></p>
+                  <p className="text-[10px] text-[#000080] font-bold">Nguyễn Đức Kiên</p>
+                  <p className="text-[10px] text-black">Architect AI Studio</p>
+                </div>
+                <div className="border-t border-[#808080] pt-2 mt-2">
+                  <p className="text-[10px] text-black"><strong>RAM:</strong> 10+ năm kinh nghiệm</p>
+                  <p className="text-[10px] text-black"><strong>CPU:</strong> AI Processing Unit v4</p>
+                </div>
+              </div>
+              <div className="win2k-statusbar justify-end gap-2 p-2">
+                <button className="win2k-btn text-[11px] px-4">OK</button>
+              </div>
             </div>
+
+            {/* Tech pill window */}
+            <div className="win2k-window">
+              <div className="win2k-titlebar">
+                <span className="text-[11px] font-bold text-white flex-1">Installed Programs</span>
+                <button className="win2k-titlebar-btn" aria-label="Close">X</button>
+              </div>
+              <div className="p-2 bg-white">
+                {["GPT-4o", "Claude 3.5", "n8n", "Make.com", "LangChain", "Python", "Zapier"].map((tech) => (
+                  <div key={tech} className="flex items-center gap-2 py-0.5 hover:bg-[#000080] hover:text-white group cursor-default px-1">
+                    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" className="shrink-0">
+                      <rect x="0" y="0" width="16" height="16" fill="#c0c0c0"/>
+                      <rect x="2" y="2" width="12" height="8" fill="#000080"/>
+                      <rect x="2" y="12" width="12" height="2" fill="#808080"/>
+                    </svg>
+                    <span className="text-[11px]">{tech}</span>
+                    <span className="ml-auto text-[10px] text-[#444] group-hover:text-white">v2.0</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-
-      {/* ——— Scroll indicator ——— */}
-      <a
-        href="#about"
-        className="relative z-10 flex flex-col items-center gap-2 self-center p-6 text-[0.7rem] uppercase tracking-widest text-text-faint transition-colors hover:text-text-muted"
-        aria-label="Cuộn xuống phần giới thiệu"
-      >
-        <div className="flex h-[34px] w-[22px] justify-center rounded-xl border-[1.5px] border-current pt-[5px]">
-          <div className="h-1.5 w-[3px] rounded-sm bg-current animate-scroll-wheel" />
-        </div>
-        <span>Cuộn xuống</span>
-      </a>
     </section>
   );
 }
