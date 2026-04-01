@@ -7,6 +7,78 @@ type Message = {
   content: string;
 };
 
+// URL của Google Apps Script Web App
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjkxeis2sfoRgp34hM_IzfIowCtiADp-CBTIVX7H-Fg9LCVq4ptIGGzf--M4w_2fYkgw/exec';
+
+// Tạo Session ID duy nhất cho mỗi phiên tải trang
+const AI_CHAT_SESSION_ID = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
+
+/**
+ * Hàm xử lý response từ AI:
+ * 1. Kiểm tra có tag ||LEAD_DATA:...|| không
+ * 2. Nếu có → Parse JSON → Gửi lên Google Sheets kèm theo Lịch sử Chat & Session ID
+ * 3. Xóa tag khỏi câu trả lời → Hiển thị sạch cho khách
+ */
+function processAIResponse(aiResponse: string, chatHistoryArray: Message[] = []) {
+  const dataPattern = /\|\|LEAD_DATA:\s*(\{.*?\})\s*\|\|/;
+
+  // Xây dựng lại Text Lịch sử Chat cho dễ đọc trên Google Sheets
+  let formattedHistory = "";
+  if (chatHistoryArray && chatHistoryArray.length > 0) {
+    formattedHistory = chatHistoryArray.map(msg => {
+      let role = msg.role === 'user' ? 'Khách' : 'AI';
+      // Lọc bỏ tag ẩn trước khi lưu vào file GG Sheets
+      let content = msg.content.replace(dataPattern, "").trim();
+      return `${role}: ${content}`;
+    }).join('\n\n');
+  }
+
+  if (aiResponse.includes("||LEAD_DATA:")) {
+    const match = aiResponse.match(dataPattern);
+
+    if (match && match[1]) {
+      try {
+        const leadData = JSON.parse(match[1]);
+        console.log("✅ Dữ liệu khách hàng bóc được:", leadData);
+
+        // Gửi dữ liệu đồng bộ
+        if (leadData.name || leadData.phone || leadData.email) {
+          sendLeadToGoogleSheets(leadData, formattedHistory);
+        }
+      } catch (error) {
+        console.error("❌ Lỗi parse JSON từ AI:", error);
+      }
+    }
+    aiResponse = aiResponse.replace(dataPattern, "").trim();
+  }
+  return aiResponse;
+}
+
+/**
+ * Hàm gửi dữ liệu Lead lên Google Apps Script → Google Sheets
+ */
+async function sendLeadToGoogleSheets(leadData: any, chatHistoryText: string) {
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: leadData.name || '',
+        phone: leadData.phone || '',
+        email: leadData.email || '',
+        source: typeof window !== 'undefined' ? window.location.href : '',
+        sessionId: AI_CHAT_SESSION_ID,  // Mã phiên kết nối
+        chatHistory: chatHistoryText,   // Bơm toàn bộ lịch sử 
+        timestamp: new Date().toLocaleString('vi-VN')
+      })
+    });
+    console.log("📤 Đã đồng bộ dữ liệu vào Google Sheets!");
+  } catch (err) {
+    console.warn("⚠️ Không gửi được dữ liệu lead:", err);
+  }
+}
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -44,31 +116,9 @@ export default function Chatbot() {
       if (!response.ok) throw new Error("API Error");
 
       const data: Message = await response.json();
-      
-      let finalContent = data.content;
-      // Tìm mảnh ghép (tag) chứa thông tin JSON
-      const leadDataMatch = finalContent.match(/\|\|LEAD_DATA:\s*({.*?})\s*\|\|/);
-      
-      if (leadDataMatch && leadDataMatch[1]) {
-        try {
-          const leadInfo = JSON.parse(leadDataMatch[1]);
-          console.log("🌟 Phát hiện khách hàng tiềm năng:", leadInfo);
-          
-          // GỬI DATA NGẦM LÊN GOOGLE SHEETS
-          fetch("https://script.google.com/macros/s/AKfycbxdVHUssw0877eQOL37Ux9rYCvm5E2posmbQ-PgpKmSxxbCA7BTSxL1kXsWjpL8gSH3FQ/exec", {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(leadInfo),
-          }).catch((err) => console.error("Lỗi kết nối Webhook:", err));
-        } catch (e) {
-          console.error("Lỗi bóc tách JSON:", e);
-        }
-        // Xóa tag ẩn khỏi câu từ chối hiển thị cho User
-        finalContent = finalContent.replace(/\|\|LEAD_DATA:\s*({.*?})\s*\|\|/g, "").trim();
-      }
+
+      // Xử lý response từ AI để bóc tách Lead Data (nếu có)
+      const finalContent = processAIResponse(data.content, [...messages, userMessage, data]);
 
       setMessages((prev) => [...prev, { ...data, content: finalContent }]);
     } catch (error) {
