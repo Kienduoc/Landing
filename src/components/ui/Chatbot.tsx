@@ -12,7 +12,7 @@ export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Xin chào! Tôi là trợ lý AI của kiên. Tôi có thể giúp gì cho bạn hôm nay?",
+      content: "Xin chào! Tôi là trợ lý AI của A Kiên. Tôi có thể giúp gì cho bạn hôm nay?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -60,7 +60,7 @@ export default function Chatbot() {
       {/* Khung chatbox */}
       {isOpen && (
         <div className="mb-4 flex h-[450px] w-[350px] flex-col overflow-hidden rounded-2xl border border-border bg-bg/95 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl transition-all max-sm:fixed max-sm:inset-0 max-sm:h-full max-sm:w-full max-sm:rounded-none max-sm:mb-0">
-          
+
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border bg-bg-card px-4 py-3">
             <div className="flex items-center gap-3">
@@ -93,17 +93,16 @@ export default function Chatbot() {
                   className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2 text-[0.875rem] leading-[1.5] ${
-                      m.role === "user"
+                    className={`max-w-[85%] rounded-2xl px-4 py-2 text-[0.875rem] leading-[1.5] ${m.role === "user"
                         ? "bg-primary text-white rounded-br-sm"
                         : "bg-bg-2 text-text-muted rounded-bl-sm border border-border"
-                    }`}
+                      }`}
                   >
                     {m.content}
                   </div>
                 </div>
               ))}
-              
+
               {/* Tình trạng gõ phím */}
               {isLoading && (
                 <div className="flex justify-start">
